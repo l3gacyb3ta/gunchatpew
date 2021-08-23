@@ -1,0 +1,47 @@
+<html>
+
+<head>
+	<title>OwO</title>
+	<link rel="stylesheet" href="https://bisporus.zephyrnet.hackclub.com/bisporus.css">
+</head>
+
+<body>
+	<main>
+		<h1>GUN CHAT</h1>
+
+		<form>
+			<label>Username:</label>
+			<input id="user"><br>
+			<label>Message:</label>
+			<input id="message">
+			<button>PEW</button>
+		</form>
+
+		<ul id="text"></ul>
+
+		<script src="https://cdn.jsdelivr.net/npm/gun/examples/jquery.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+		<script>
+			var gun = Gun({ peers: ['https://gun-manhattan.herokuapp.com/gun', 'https://gun-peer-99.herokuapp.com'] });
+
+			$('form').on('submit', function (event) {
+				event.preventDefault()
+				var input = $('form').find('#message')
+				var uname = $('form').find('#user').val()
+				gun.get('message').put({ name: input.val(), from: uname });
+				input.val('')
+			})
+
+			gun.get('message').on(function (data, key) {
+				var h1 = $('h1')
+				var text = $('#text')
+				let new_message = $("<li></li>").text(data.from + ": " + data.name)
+
+				text.append(new_message)
+
+			})
+		</script>
+	</main>
+</body>
+
+</html>
